@@ -1,0 +1,143 @@
+<script>
+function getSatellite() {
+var typeOfSatellite = document.getElementById("typeOfSatellite").value
+switch (typeOfSatellite) {
+case "GOES-East": {
+document.getElementById("typeOfEnhancement").innerHTML = '<option value="G16-ABI-FD-BAND02.100">Visible</option><option value="G16-ABI-FD-BAND09-VAPR.100">Mid-Level Water Vapor Enhanced</option><option value="G16-ABI-FD-BAND13-GRAD.100">Infrared Enhanced</option>'
+document.getElementById("chooseTimestamp").innerHTML = '<option value="10m">10-minute</option><option value="20m">20-minute</option><option value="30m">30-minute</option><option value="40m">40-minute</option><option value="50m">50-minute</option><option value="1h">1-hourly</option>'
+}
+break
+case "GOES-West": {
+document.getElementById("typeOfEnhancement").innerHTML = '<option value="G17-ABI-FD-BAND02.100">Visible</option><option value="G17-ABI-FD-BAND09-VAPR.100">Mid-Level Water Vapor Enhanced</option><option value="G17-ABI-FD-BAND13-GRAD.100">Infrared Enhanced</option>'
+document.getElementById("chooseTimestamp").innerHTML = '<option value="10m">10-minute</option><option value="20m">20-minute</option><option value="30m">30-minute</option><option value="40m">40-minute</option><option value="50m">50-minute</option><option value="1h">1-hourly</option>'
+}
+break
+case "Himawari-8": {
+document.getElementById("typeOfEnhancement").innerHTML = '<option value="HIMAWARI-B03.100">Visible</option><option value="HIMAWARI-B09-VAPR.100">Mid-Level Water Vapor Enhanced</option><option value="HIMAWARI-B13-GRAD.100">Infrared Enhanced</option>'
+document.getElementById("chooseTimestamp").innerHTML = '<option value="10m">10-minute</option><option value="20m">20-minute</option><option value="30m">30-minute</option><option value="40m">40-minute</option><option value="50m">50-minute</option><option value="1h">1-hourly</option>'
+}
+break
+case "Global": {
+document.getElementById("typeOfEnhancement").innerHTML = '<option value="globalvis.100">Visible</option><option value="globalir.100">Unenhanced Infrared</option><option value="globalir-avn.100">Enhanced Infrared Aviation</option><option value="globalir-bd.100">Enhanced Infrared Dvorak</option><option value="globalir-ott.100">Enhanced Infrared Tops</option><option value="globalir-ott.100,globalvis-tsp.100">Day Night Hybrid</option>'
+document.getElementById("chooseTimestamp").innerHTML = '<option value="1h">1-hourly</option><option value="2h">2-hourly</option><option value="3h">3-hourly</option>'
+}
+break
+}
+}
+function getEverything() {
+var typeOfEnhancement = document.getElementById("typeOfEnhancement").value
+var latitude = document.getElementById("latitude").value
+if (latitude == "") {
+latitude = 0
+}
+var longitude = document.getElementById("longitude").value
+if (longitude == "") {
+longitude = 0
+}
+var size = document.getElementById("chooseSize").value
+size = size.split("x")
+var width = size[0]
+var height = size[1]
+var zoom = document.getElementById("zoom").value
+var hours = document.getElementById("numberOfFrames").value
+var timestep = document.getElementById("chooseTimestamp").value
+if (hours == '') {
+document.getElementById("warningFrames").innerHTML = 'Please input a number.'
+} else {
+document.getElementById("loading").innerHTML = 'LOADING IMAGE...'
+var buildFloater = '<img id="RE" src="http://realearth.ssec.wisc.edu/api/image?products=' + typeOfEnhancement + '&width=' + width + '&height=' + height + '&client=RealEarth&background=bw&labels=line&center=' + latitude + ',' + longitude + '&zoom=' + zoom + '&timespan=-' + hours + 'h,0s&timestep=' + timestep + '&animate=true&animationspeed=92.10526315789474" alt="">'
+document.getElementById("output").innerHTML = buildFloater
+document.getElementById("RE").addEventListener("load", reloader)
+function reloader() {
+document.getElementById("loading").innerText = ""
+}
+}
+}
+function warningSize() {
+var size = document.getElementById("chooseSize").value
+size = size.split("x")
+var width = size[0]
+if (width == "1920") {
+document.getElementById("warningSize").innerHTML = '1080p FHD will load slower.'
+} else document.getElementById("warningSize").innerText = ''
+}
+</script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+<body class="text-center" style="text-align: center" onload="getSatellite()"><div>
+<h1>Custom Satellite Picker</h1>
+<p>This page provides the latest custom geostationary satellite for all around the world. Navigate the contents below to produce your image.</p><p>Images courtesy of <a href="https://www.ssec.wisc.edu/realearth" target="_blank" rel="noopener noreferrer">University of Wisconsin, Madison (UWSSEC)</a>.</p></div>
+<hr>
+<div>
+<b><h2>STEP ONE</h2></b>
+<p>Choose your desired satellite.</p>
+<select id="typeOfSatellite" onchange="getSatellite()"><option value="GOES-East" selected>GOES-East</option><option value="GOES-West">GOES-West</option><option value="Himawari-8">Himawari-8</option><option value="Global">Global</option>
+</select>
+</div>
+<hr>
+<div>
+<b><h2>STEP TWO</h2></b>
+<p>Choose your desired satellite enhancement.</p><select id="typeOfEnhancement"></select>
+</div>
+<hr>
+<div>
+<div>
+<b><h2>STEP THREE</h2></b>
+<p>Input parameters if needed.</p>
+</div>
+<div class="row">
+<div class="col row border p-3">
+<h4>CENTERING</h4>
+<p style="color: gray;">*If blank, coordinates will be 0,0</p><div class="col">
+<p>Latitude</p>
+<input type="number" id="latitude" placeholder="0"></div>
+<div class="col">
+<p>Longitude</p>
+<input type="number" id="longitude" placeholder="0"></div>
+</div>
+<div class="col border p-3">
+<h4>SIZE</h4>
+<select name="" id="chooseSize" onchange="warningSize()"><option value="640x360">640 x 360</option><option value="853x480">853 x 480</option><option value="1280x720" selected>1280 x 720</option><option value="1920x1080">1920 x 1080</option></select> px
+<p id="warningSize" style="color: orange;"></p></div>
+</div>
+<div class="row m-3">
+<div class="col border p-3">
+<h4>ZOOM</h4>
+<p style="color: gray;">*6 is default and recommended.</p><select id="zoom">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6" selected>6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+</select>
+</div>
+<div class="col border p-3">
+<h4>NUMBER OF LOOKBACK HOURS</h4>
+<p style="color: gray;">*How many hours to look back</p><input type="number" id="numberOfFrames" required> hours<p id="warningFrames" style="color: red;"></p></div>
+</div>
+<div class="col border m-3 p-3">
+<h4>TIMEFRAME INTERVAL</h4>
+<select name="" id="chooseTimestamp">
+</select>
+</div>
+<div>
+<button class="btn btn-primary rounded w-50" onclick="getEverything()">Submit</button></div>
+</div>
+<hr>
+<div>
+<b><h2>OUTPUT IMAGE</h2></b>
+<p style="color: gray;">*Right-click or long hold to save image.</p><p id="loading" style="font-size: 5em;"></p><div id="output" class="border black"></div>
+
+ 
+<a href=''><script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=50a3266c0bd99ce47cdc80eb630eb161ddcc9e2c'></script>
+<script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/796665/t/1"></script></a>
+
+</div>
+<footer></footer>
+<p class="m-0 p-0"><b>Version 1.2 (beta)</b></p><p class="m-0 p-0"><b>Last Updated: </b>2021-02-21 at 01:35 SGT.</p></footer>
+</body>
