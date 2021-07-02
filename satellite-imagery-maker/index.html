@@ -85,12 +85,12 @@ integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolfl
 <div>
 <div>
 <b><h2>STEP THREE</h2></b>
-<p>Input parameters if needed.</p>
+<p>Input your desired perimeters.</p>
 </div>
 <div class="row">
 <div class="col row border p-3">
 <h4>CENTERING</h4>
-<p style="color: gray;">*If blank, coordinates will be 0,0</p><div class="col">
+<p style="color: gray;">*If blank all coordinates will be O degrees.</p><div class="col">
 <p>Latitude</p>
 <input type="number" id="latitude" placeholder="0"></div>
 <div class="col">
@@ -100,7 +100,7 @@ integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolfl
 <div class="col border p-3">
 <h4>SIZE</h4>
 <select name="" id="chooseSize" onchange="warningSize()"><option value="640x360">640 x 360</option><option value="853x480">853 x 480</option><option value="1280x720" selected>1280 x 720</option><option value="1920x1080">1920 x 1080</option></select> px
-<p id="warningSize" style="color: orange;"></p></div>
+<p id="warningSize" style="color: red;"></p></div>
 </div>
 <div class="row m-3">
 <div class="col border p-3">
@@ -117,8 +117,8 @@ integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolfl
 </select>
 </div>
 <div class="col border p-3">
-<h4>NUMBER OF LOOKBACK HOURS</h4>
-<p style="color: gray;">*How many hours to look back</p><input type="number" id="numberOfFrames" required> hours<p id="warningFrames" style="color: red;"></p></div>
+<h4>NUMBER OF HOURS</h4>
+<p style="color: gray;">*How many hours do you want to look back</p><input type="number" id="numberOfFrames" required> hours<p id="warningFrames" style="color: red;"></p></div>
 </div>
 <div class="col border m-3 p-3">
 <h4>TIMEFRAME INTERVAL</h4>
