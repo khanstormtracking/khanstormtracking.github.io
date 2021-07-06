@@ -1,2 +1,61 @@
-<!DOCTYPE html>
-<h1 style="color:green;">Khan Storm Tracking</h1>
+<script src="http://force-13.com/wp-content/uploads/2021/07/ATLC.js?69"></script>
+
+<section style="display: none;"><!-- User to input information here inside <span></span> -->
+<!-- Input your location and time of advisory -->
+YOUR SURNAME: <span id="yourNameGet"></span>
+YOUR CITY: <span id="cityGet"></span>
+YOUR STATE: <span id="stateGet"></span>
+TIME (e.g. 1800 UTC SAT FEB 22 2020): <span id="fullTimeGet"></span>
+ADVISORY HEADLINE: <span id="advHeaderGet"></span><!-- Cyclone ATCF information -->
+INPUT INTERP ATCF: <span id="ATCFGet"></span>
+ADVISORY NUMBER: <span id="advNumGet"></span><!-- Next advisory at -->
+NEXT ADVISORY TIME (e.g. SEP 16 2021, 1800 UTC)<span id="nextAdvGet"></span></section>&nbsp;
+
+Please allow time for floater to build.
+<div id="background" class="color" style="text-align: center;">
+
+<b>• STORM FLOATER •</b>
+<div id="floater"></div>
+</div>
+<div>
+<pre style="word-break: normal; padding-right: 0%;"><span id="cycloneNaturePost"></span> <span id="cycloneLargeCatPost"></span> <span id="cycloneNumberPost"></span>L (<span id="cycloneName"></span>)
+PUBLIC ADVISORY #<span id="advNumPost"></span>
+FORCE THIRTEEN <span id="cityPost"></span>, <span id="statePost"></span>
+<span id="fullTimePost"></span>
+    
+...<span id="advHeaderPost"></span>...
+    
+SUMMARY OF INFORMATION
+-----------------------------------
+LOCATION...NEAR <span id="latitudeNumPost"></span> <span id="latitudeRefPost"></span> <span id="longitudeNumPost"></span> <span id="longitudeRefPost"></span>...
+MAXIMUM SUSTAINED WINDS...<span id="windSpeedPost"></span>MPH...<span id="windSpeedConverted"></span>KM/H
+MINIMUM CENTRAL PRESSURE...<span id="pressurePost"></span>MB
+    
+WATCHES AND WARNINGS
+-----------------------------------
+
+</pre>
+</div>
+<div>
+<pre style="word-break: normal; padding-right: 0%;">DISCUSSION
+-----------------------------------
+
+</pre>
+</div>
+<div style="text-align: center; border: 2px solid gray;"></div>
+<div>
+<pre style="word-break: normal; padding-right: 0%;"><b>LOCAL AND OFFICIAL SOURCES BELOW</b>
+<a href="https://www.nhc.noaa.gov/?atlc" target="_blank" rel="noopener noreferrer">National Hurricane Center (Atlantic)</a>
+    
+<b><span id="nextAdvPost"></span></b>
+    
+$$
+Forecaster <span id="yourNamePost"></span></pre>
+</div>
+<div id="backgroundGraphic" class="color" style="text-align: center;"><b>• OFFICIAL FWC-N FORECAST •</b>
+<span id="FNMOCJTWCPost"></span></div>
+<div id="backgroundGraphic1" class="color" style="text-align: center;"><b>• NATIONAL HURRICANE CENTER FORECAST •</b>
+<span id="RSMCPost"></span></div>
+&nbsp;
+
+<footer style="border: solid black; text-align: center;"><b><i>©2021 Force Thirteen • Cyclone Tracker • Text Products</i></b></footer>
