@@ -1,134 +1,394 @@
-<script>
-function getSatellite() {
-var typeOfSatellite = document.getElementById("typeOfSatellite").value
-switch (typeOfSatellite) {
-case "GOES-East": {
-document.getElementById("typeOfEnhancement").innerHTML = '<option value="G16-ABI-FD-BAND02.100">Visible</option><option value="G16-ABI-FD-BAND09-VAPR.100">Mid-Level Water Vapor Enhanced</option><option value="G16-ABI-FD-BAND13-GRAD.100">Infrared Enhanced</option>'
-document.getElementById("chooseTimestamp").innerHTML = '<option value="10m">10-minute</option><option value="20m">20-minute</option><option value="30m">30-minute</option><option value="40m">40-minute</option><option value="50m">50-minute</option><option value="1h">1-hourly</option>'
-}
-break
-case "GOES-West": {
-document.getElementById("typeOfEnhancement").innerHTML = '<option value="G17-ABI-FD-BAND02.100">Visible</option><option value="G17-ABI-FD-BAND09-VAPR.100">Mid-Level Water Vapor Enhanced</option><option value="G17-ABI-FD-BAND13-GRAD.100">Infrared Enhanced</option>'
-document.getElementById("chooseTimestamp").innerHTML = '<option value="10m">10-minute</option><option value="20m">20-minute</option><option value="30m">30-minute</option><option value="40m">40-minute</option><option value="50m">50-minute</option><option value="1h">1-hourly</option>'
-}
-break
-case "Himawari-8": {
-document.getElementById("typeOfEnhancement").innerHTML = '<option value="HIMAWARI-B03.100">Visible</option><option value="HIMAWARI-B09-VAPR.100">Mid-Level Water Vapor Enhanced</option><option value="HIMAWARI-B13-GRAD.100">Infrared Enhanced</option>'
-document.getElementById("chooseTimestamp").innerHTML = '<option value="10m">10-minute</option><option value="20m">20-minute</option><option value="30m">30-minute</option><option value="40m">40-minute</option><option value="50m">50-minute</option><option value="1h">1-hourly</option>'
-}
-break
-case "Global": {
-document.getElementById("typeOfEnhancement").innerHTML = '<option value="globalvis.100">Visible</option><option value="globalir.100">Unenhanced Infrared</option><option value="globalir-avn.100">Enhanced Infrared Aviation</option><option value="globalir-bd.100">Enhanced Infrared Dvorak</option><option value="globalir-ott.100">Enhanced Infrared Tops</option><option value="globalir-ott.100,globalvis-tsp.100">Day Night Hybrid</option>'
-document.getElementById("chooseTimestamp").innerHTML = '<option value="1h">1-hourly</option><option value="2h">2-hourly</option><option value="3h">3-hourly</option>'
-}
-break
-}
-}
-function getEverything() {
-var typeOfEnhancement = document.getElementById("typeOfEnhancement").value
-var latitude = document.getElementById("latitude").value
-if (latitude == "") {
-latitude = 0
-}
-var longitude = document.getElementById("longitude").value
-if (longitude == "") {
-longitude = 0
-}
-var size = document.getElementById("chooseSize").value
-size = size.split("x")
-var width = size[0]
-var height = size[1]
-var zoom = document.getElementById("zoom").value
-var hours = document.getElementById("numberOfFrames").value
-var timestep = document.getElementById("chooseTimestamp").value
-if (hours == '') {
-document.getElementById("warningFrames").innerHTML = 'Please input a number.'
-} else {
-document.getElementById("loading").innerHTML = 'LOADING IMAGE...'
-var buildFloater = '<img id="RE" src="http://realearth.ssec.wisc.edu/api/image?products=' + typeOfEnhancement + '&width=' + width + '&height=' + height + '&client=RealEarth&background=bw&labels=line&center=' + latitude + ',' + longitude + '&zoom=' + zoom + '&timespan=-' + hours + 'h,0s&timestep=' + timestep + '&animate=true&animationspeed=92.10526315789474" alt="">'
-document.getElementById("output").innerHTML = buildFloater
-document.getElementById("RE").addEventListener("load", reloader)
-function reloader() {
-document.getElementById("loading").innerText = ""
-}
-}
-}
-function warningSize() {
-var size = document.getElementById("chooseSize").value
-size = size.split("x")
-var width = size[0]
-if (width == "1920") {
-document.getElementById("warningSize").innerHTML = '1080p FHD will load slower.'
-} else document.getElementById("warningSize").innerText = ''
-}
-</script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-
-<body class="text-center" style="text-align: center" onload="getSatellite()"><div>
-<h1>Custom Satellite Picker</h1>
-<p>This page provides the latest custom geostationary satellite for all around the world. Navigate the contents below to produce your image.</p><p>Images courtesy of <a href="https://www.ssec.wisc.edu/realearth" target="_blank" rel="noopener noreferrer">University of Wisconsin, Madison (UWSSEC)</a>.</p></div>
-<hr>
-<div>
-<b><h2>STEP ONE</h2></b>
-<p>Choose your desired satellite.</p>
-<select id="typeOfSatellite" onchange="getSatellite()"><option value="GOES-East" selected>GOES-East</option><option value="GOES-West">GOES-West</option><option value="Himawari-8">Himawari-8</option><option value="Global">Global</option>
-</select>
-</div>
-<hr>
-<div>
-<b><h2>STEP TWO</h2></b>
-<p>Choose your desired satellite enhancement.</p><select id="typeOfEnhancement"></select>
-</div>
-<hr>
-<div>
-<div>
-<b><h2>STEP THREE</h2></b>
-<p>Input your desired perimeters.</p>
-</div>
-<div class="row">
-<div class="col row border p-3">
-<h4>CENTERING</h4>
-<p style="color: gray;">*If blank all coordinates will be O degrees.</p><div class="col">
-<p>Latitude</p>
-<input type="number" id="latitude" placeholder="0"></div>
-<div class="col">
-<p>Longitude</p>
-<input type="number" id="longitude" placeholder="0"></div>
-</div>
-<div class="col border p-3">
-<h4>SIZE</h4>
-<select name="" id="chooseSize" onchange="warningSize()"><option value="640x360">640 x 360</option><option value="853x480">853 x 480</option><option value="1280x720" selected>1280 x 720</option><option value="1920x1080">1920 x 1080</option></select> px
-<p id="warningSize" style="color: red;"></p></div>
-</div>
-<div class="row m-3">
-<div class="col border p-3">
-<h4>ZOOM</h4>
-<p style="color: gray;">*6 is default and recommended.</p><select id="zoom">
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6" selected>6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-</select>
-</div>
-<div class="col border p-3">
-<h4>NUMBER OF HOURS</h4>
-<p style="color: gray;">*How many hours do you want to look back</p><input type="number" id="numberOfFrames" required> hours<p id="warningFrames" style="color: red;"></p></div>
-</div>
-<div class="col border m-3 p-3">
-<h4>TIMEFRAME INTERVAL</h4>
-<select name="" id="chooseTimestamp">
-</select>
-</div>
-<div>
-<button class="btn btn-primary rounded w-50" onclick="getEverything()">Submit</button></div>
-</div>
-<hr>
-<div>
-<b><h2>OUTPUT IMAGE</h2></b>
-<p style="color: gray;">*Right-click or long hold to save image.</p><p id="loading" style="font-size: 5em;"></p><div id="output" class="border black"></div>
+<!DOCTYPE html>
+<html lang="en">
+	<head prefix="og: http://ogp.me/ns#">
+		<meta charset="utf-8">
+		<title>Zoom Earth | LIVE weather, storm tracker, wind & radar map</title>
+		<meta name="description" content="View LIVE satellite images, rain radar, and animated wind speed maps. Track the latest hurricanes, weather and wildfires in real-time.">
+		<meta name="author" content="Zoom Earth">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no, viewport-fit=cover">
+		<meta name="referrer" content="origin">
+		<meta name="google" content="notranslate">
+		<meta name="robots" content="max-image-preview:large">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="apple-mobile-web-app-title" content="Zoom Earth">
+		<meta name="application-name" content="Zoom Earth">
+		<meta name="msapplication-tooltip" content="Zoom Earth">
+		<meta name="msapplication-starturl" content="https://zoom.earth/">
+		<meta name="msapplication-TileImage" content="https://zoom.earth/assets/images/icon-400.7.jpg">
+		<meta name="msapplication-TileColor" content="#000">
+		<meta name="msapplication-navbutton-color" content="#000">
+		<meta name="theme-color" content="#000">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://zoom.earth/">
+		<meta property="og:site_name" content="Zoom Earth">
+		<meta property="og:title" content="Zoom Earth | LIVE weather, storm tracker, wind & radar map">
+		<meta property="og:description" content="View LIVE satellite images, rain radar, and animated wind speed maps. Track the latest hurricanes, weather and wildfires in real-time.">
+		<meta property="og:image" content="https://zoom.earth/assets/images/icon-400.7.jpg">
+		<meta name="twitter:card" content="summary">
+		<meta name="twitter:site" content="@zoom_earth">
+		<meta name="twitter:title" content="Zoom Earth | LIVE weather, storm tracker, wind & radar map">
+		<meta name="twitter:description" content="View LIVE satellite images, rain radar, and animated wind speed maps. Track the latest hurricanes, weather and wildfires in real-time.">
+		<meta name="twitter:image" content="https://zoom.earth/assets/images/icon-400.7.jpg">
+		<link rel="shortcut icon" href="https://zoom.earth/assets/images/icon-16.3.png">
+		<link rel="icon" sizes="16x16" href="https://zoom.earth/assets/images/icon-16.3.png">
+		<link rel="icon" sizes="32x32" href="https://zoom.earth/assets/images/icon-32.3.png">
+		<link rel="icon" sizes="100x100" href="https://zoom.earth/assets/images/icon-100.6.jpg">
+		<link rel="icon" sizes="200x200" href="https://zoom.earth/assets/images/icon-200.7.jpg">
+		<link rel="icon" sizes="400x400" href="https://zoom.earth/assets/images/icon-400.7.jpg">
+		<link rel="image_src" href="https://zoom.earth/assets/images/icon-400.7.jpg">
+		<link rel="apple-touch-icon-precomposed" href="https://zoom.earth/assets/images/icon-apple.1.jpg">
+		<link rel="preconnect" href="https://tiles.zoom.earth" crossorigin="anonymous">
+		<link rel="dns-prefetch" href="https://tiles.zoom.earth">
+		<link rel="dns-prefetch" href="https://tilecache.rainviewer.com/">
+		<link rel="dns-prefetch" href="https://t.ssl.ak.dynamic.tiles.virtualearth.net">
+		<link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+		<link rel="dns-prefetch" href="https://tpc.googlesyndication.com">
+		<link rel="dns-prefetch" href="https://googleads.g.doubleclick.net">
+		<link rel="dns-prefetch" href="https://stats.g.doubleclick.net">
+		<link rel="dns-prefetch" href="https://www.google-analytics.com">
+		<link rel="preload" href="/assets/css/app.b6faf64d.css" as="style">
+		<link rel="stylesheet" href="/assets/css/app.b6faf64d.css">
+		<link rel="prefetch" href="https://tiles.zoom.earth/live/latest.json" crossorigin="anonymous">
+		<link rel="preload" href="/assets/fonts/museo-sans-cyrl-500.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+		<link rel="preload" href="/assets/fonts/museo-sans-cyrl-700.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+		<link rel="manifest" href="/manifest.8.json">
+	</head>
+	<body class="cookies-consent scroll-chrome">
+		<main class="app ui-clock-24">
+			<section id="map" tabindex="0"></section>
+			<div class="coordinate">
+				<div class="lat"></div>
+				<div class="lon"></div>
+			</div>
+			<div class="scale-line"><div></div></div>
+			<section class="panel clock">
+				<nav class="live">
+					<svg class="progress">
+						<circle cx="50%" cy="50%" r="15.9155" stroke="#fff" stroke-width="2.5" fill="none" class="track"/>
+						<circle cx="50%" cy="50%" r="15.9155" stroke="#fff" stroke-width="2.5" fill="none" class="bar"/>
+					</svg>
+					<button class="pause" aria-label="Pause animation"><span></span></button>
+					<button class="play" aria-label="Play animation"><span></span></button>
+					<div class="date">
+						<div class="text"><div class="activity-dots"><div></div><div></div><div></div></div></div>
+						<button class="up" aria-label="Next day" disabled><span></span></button>
+						<button class="down" aria-label="Previous day" disabled><span></span></button>
+					</div>
+					<div class="text colon blink">:</div>
+					<div class="hour">
+						<div class="text"><div class="activity-dots"><div></div><div></div><div></div></div></div>
+						<button class="up" aria-label="Next hour" disabled><span></span></button>
+						<button class="down" aria-label="Previous hour" disabled><span></span></button>
+					</div>
+					<div class="text am-pm"></div>
+					<div class="minute">
+						<div class="text"><div class="activity-dots"><div></div><div></div><div></div></div></div>
+						<button class="up" aria-label="Next time" disabled><span></span></button>
+						<button class="down" aria-label="Previous time" disabled><span></span></button>
+					</div>
+				</nav>
+				<nav class="daily">
+					<div class="year">
+						<div class="text"><div class="activity-dots"><div></div><div></div><div></div></div></div>
+						<button class="up" aria-label="Next year" disabled><span></span></button>
+						<button class="down" aria-label="Previous year" disabled><span></span></button>
+					</div>
+					<div class="month">
+						<div class="text"><div class="activity-dots"><div></div><div></div><div></div></div></div>
+						<button class="up" aria-label="Next month" disabled><span></span></button>
+						<button class="down" aria-label="Previous month" disabled><span></span></button>
+					</div>
+					<div class="day">
+						<div class="text"><div class="activity-dots"><div></div><div></div><div></div></div></div>
+						<button class="up" aria-label="Next day" disabled><span></span></button>
+						<button class="down" aria-label="Previous day" disabled><span></span></button>
+					</div>
+					<div class="am-pm">
+						<div class="text"><div class="activity-dots"><div></div><div></div><div></div></div></div>
+						<button class="up" aria-label="Next time" disabled><span></span></button>
+						<button class="down" aria-label="Previous time" disabled><span></span></button>
+					</div>
+				</nav>
+				<button class="recent" aria-label="Latest date" disabled><span></span></button>
+				<div class="monthly">Zoom out for <strong>LIVE images</strong></div>
+			</section>
+			<button class="menu" aria-label="Layers &amp; overlays">
+				<span class="icon"></span>
+				<span class="title"></span>
+				<span class="arrow"></span>
+			</button>
+			<nav class="panel menu">
+				<h1><span>Zoom Earth</span></h1>
+				<form>
+					<div>
+						<h4 class="layers">Layers</h4>
+						<div class="menu-item radio live"><input type="radio" name="layer" id="menu-live" checked><label for="menu-live" aria-description="Near real-time imagery from geostationary satellites">Live Satellite</label></div>
+						<div class="menu-item radio daily"><input type="radio" name="layer" id="menu-daily"><label for="menu-daily" aria-description="High-definition imagery,\nupdated every day since 2000">HD Satellite</label></div>
+						<div class="menu-item radio base"><input type="radio" name="layer" id="menu-base"><label for="menu-base" aria-description="NASA Blue Marble imagery without clouds">Base Map</label></div>
+						<h4 class="overlays">Overlays</h4>
+						<div class="menu-item icon wind"><input type="checkbox" id="menu-wind"><label for="menu-wind" aria-description="Animation of forecasted surface wind speeds">Wind</label></div>
+						<div class="menu-item icon radar"><input type="checkbox" id="menu-radar"><label for="menu-radar" aria-description="Real-time rain and snow detected by radar">Rain Radar</label></div>
+						<div class="menu-item icon fire-spots"><input type="checkbox" id="menu-fire-spots"><label for="menu-fire-spots" aria-description="Wildfires and sources of heat, updated every day">Fires &amp; Heat</label></div>
+						<div class="menu-item icon labels"><input type="checkbox" id="menu-labels" checked><label for="menu-labels" aria-description="Place names, borders, and coastlines">Labels</label></div>
+						<div class="menu-item icon storm-tracks"><input type="checkbox" id="menu-storm-tracks" checked><label for="menu-storm-tracks" aria-description="Tracks and forecasts of tropical storms">Storm Tracks</label></div>
+						<div class="menu-item icon terminator"><input type="checkbox" id="menu-terminator" checked><label for="menu-terminator" aria-description="Boundary line between day and night">Day-Night Line</label></div>
+						<div class="menu-item icon crosshairs"><input type="checkbox" id="menu-crosshairs"><label for="menu-crosshairs" aria-description="Guide cross in the middle of the view">Crosshairs</label></div>
+					</div>
+				</form>
+			</nav>
+			<button class="search" aria-label="Search">
+				<span class="icon"></span>
+				<span class="close"></span>
+			</button>
+			<aside class="panel search notranslate">
+				<h3 class="search">Search</h3>
+				<button class="close" aria-label="Close"><span></span></button>
+				<form>
+					<input name="q" type="search" inputmode="search" placeholder="Find a place or a storm&hellip;" aria-label="Search" maxlength="255" autocorrect="off" autocapitalize="off" autocomplete="off">
+				</form>
+				<button class="wide locate">
+					<span class="icon"></span><span class="text">Your Location</span>
+				</button>
+				<a href="/storms/" tabindex="-1"><button class="wide archive">
+					<span class="icon"></span><span class="text">Tropical Archive</span>
+				</button></a>
+				<ul class="result-list"></ul>
+				<h3 class="storms">Latest Tropical Storms</h3>
+				<div class="storm-list"></div>
+			</aside>
+			<button class="about" aria-label="About">
+				<span class="icon"></span>
+				<span class="close"></span>
+			</button>
+			<button class="settings" aria-label="Settings">
+				<span class="icon"></span>
+			</button>
+			<aside class="panel settings">
+				<header>
+					<div class="icon"></div><h2>Settings</h2>
+					<button class="close" aria-label="Close"><span></span></button>
+				</header>
+				<form name="settings">
+					<div class="row">
+						<p>Timezone</p>
+						<div class="segment bar2">
+							<input type="radio" name="timezone" id="setting-timezone-local" value="local" checked><label for="setting-timezone-local">local</label>
+							<input type="radio" name="timezone" id="setting-timezone-utc" value="utc"><label for="setting-timezone-utc">UTC</label>
+							<div class="selection"></div>
+						</div>
+					</div>
+					<div class="row">
+						<p>Clock format</p>
+						<div class="segment bar2">
+							<input type="radio" name="clockFormat" id="setting-clock-hour12" value="hour12" checked><label for="setting-clock-hour12">12 hour</label>
+							<input type="radio" name="clockFormat" id="setting-clock-hour24" value="hour24"><label for="setting-clock-hour24">24 hour</label>
+							<div class="selection"></div>
+						</div>
+					</div>
+					<div class="row">
+						<p>Coordinates</p>
+						<div class="segment bar2">
+							<input type="radio" name="coordinateUnit" id="setting-coordinate-dms" value="dms" checked><label for="setting-coordinate-dms">DMS</label>
+							<input type="radio" name="coordinateUnit" id="setting-coordinate-decimal" value="decimal"><label for="setting-coordinate-decimal">decimal</label>
+							<div class="selection"></div>
+						</div>
+					</div>
+					<div class="row">
+						<p>Measurement</p>
+						<div class="segment bar3">
+							<input type="radio" name="measureUnit" id="setting-measure-metric" value="metric"><label for="setting-measure-metric">km</label>
+							<input type="radio" name="measureUnit" id="setting-measure-imperial" value="imperial" checked><label for="setting-measure-imperial">miles</label>
+							<input type="radio" name="measureUnit" id="setting-measure-nautical" value="nautical"><label for="setting-measure-nautical">nm</label>
+							<div class="selection"></div>
+						</div>
+					</div>
+					<div class="row">
+						<p>Wind speed</p>
+						<div class="segment bar3">
+							<input type="radio" name="windUnit" id="setting-wind-kmh" value="kmh"><label for="setting-wind-kmh">km/h</label>
+							<input type="radio" name="windUnit" id="setting-wind-mph" value="mph" checked><label for="setting-wind-mph">mph</label>
+							<input type="radio" name="windUnit" id="setting-wind-knots" value="knots"><label for="setting-wind-knots">knots</label>
+							<div class="selection"></div>
+						</div>
+					</div>
+					<div class="row animation">
+						<p>Animation duration</p>
+						<div class="segment bar4">
+							<input type="radio" name="animationDuration" id="setting-anim1" value="3" checked><label for="setting-anim1">3 hours</label>
+							<input type="radio" name="animationDuration" id="setting-anim2" value="6"><label for="setting-anim2">6 hours</label>
+							<input type="radio" name="animationDuration" id="setting-anim3" value="12"><label for="setting-anim3">12 hours</label>
+							<input type="radio" name="animationDuration" id="setting-anim4" value="24"><label for="setting-anim4">24 hours</label>
+							<div class="selection"></div>
+						</div>
+					</div>
+				</form>
+			</aside>
+			<article class="panel storm-details">
+				<header>
+					<h1></h1>
+					<p class="lastmod"></p>
+					<button class="close" aria-label="Close"><span></span></button>
+				</header>
+				<section lang="en"><div class="text"></div></section>
+			</article>
+			<aside class="panel storm-info">
+				<header>
+					<h2></h2>
+					<button class="close" aria-label="Close"><span></span></button>
+				</header>
+				<section>
+					<table>
+						<thead>
+							<tr>
+								<th class="date" scope="col">Date</th>
+								<th class="time" scope="col">Time</th>
+								<th class="type" scope="col">Type</th>
+								<th class="wind" scope="col">Wind</th>
+								<th class="pressure" scope="col">Pressure</th>
+							</tr>
+							<tr>
+								<td class="date" colspan="2">UTC</td>
+								<td class="type"></td>
+								<td class="wind">mph</td>
+								<td class="pressure">mb</td>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</section>
+				<footer>
+					<div class="foot-type"><span class="icon"></span></div>
+					<div class="foot-text notranslate">
+						<p class="text1"></p>
+						<p class="text2"></p>
+					</div>
+					<div class="foot-links notranslate">
+						<p class="details"><span class="icon"></span><span class="text long">Latest Warnings</span><span class="text short">Info</span></p>
+						<a class="twitter" href="https://twitter.com/zoom_earth" target="_blank" rel="noopener"><p><span class="icon"></span><span class="text">Twitter Updates</span></p></a>
+					</div>
+				</footer>
+			</aside>
+			<article class="panel storm-archive">
+				<header>
+					<a href="/storms/" target="_top"><div class="icon"></div><h2>Tropical Archive</h2></a>
+					<nav>
+						<button class="left" aria-label="Previous year"><span></span></button>
+						<h3></h3>
+						<button class="right" aria-label="Next year" disabled><span></span></button>
+					</nav>
+					<form name="storms" class="segment bar3">
+						<input type="radio" name="sort" id="sort-type" value="type" checked><label for="sort-type">Type</label>
+						<input type="radio" name="sort" id="sort-alpha" value="alpha"><label for="sort-alpha">A-Z</label>
+						<input type="radio" name="sort" id="sort-date" value="date"><label for="sort-date">Date</label>
+						<div class="selection"></div>
+					</form>
+					<button class="close" aria-label="Close"><span></span></button>
+				</header>
+				<section class="storm-list">
+					<p class="description"></p>
+					<ul></ul>
+				</section>
+			</article>
+			<button class="share" aria-label="Share">
+				<span class="icon"></span>
+			</button>
+			<div class="panel measure">
+				<button class="distance" aria-label="Measure distance">
+					<span class="icon"></span>
+					<span class="close"></span>
+				</button>
+				<button class="area" aria-label="Measure area">
+					<span class="icon"></span>
+					<span class="close"></span>
+				</button>
+			</div>
+			<button class="wind" aria-label="Wind animation" data-state="off">
+				<span class="icon"></span>
+			</button>
+			<div class="panel zoom">
+				<button class="in" aria-label="Zoom in">
+					<span class="icon"></span>
+				</button>
+				<button class="out" aria-label="Zoom out">
+					<span class="icon"></span>
+				</button>
+			</div>
+			<aside class="panel about notranslate">
+				<h3>About Zoom Earth</h3>
+				<div>
+					<p>
+						<strong>Zoom Earth</strong> shows live weather satellite images of the Earth in a fast, zoomable map.
+						Explore near real-time weather images, rainfall radar maps, and animated wind maps.
+						Track tropical cyclones, severe storms, wildfires, natural hazards and more.
+					</p>
+					<h4>Sources and Acknowledgements</h4>
+					<ul>
+						<li>
+							Live weather images are updated every 10 minutes from <a href="https://en.wikipedia.org/wiki/Geostationary_Operational_Environmental_Satellite" target="_blank" rel="nofollow noopener">NOAA GOES</a> and <a href="https://en.wikipedia.org/wiki/Himawari_8" target="_blank" rel="nofollow noopener">JMA Himawari-8</a> geostationary satellites.
+							<a href="https://www.eumetsat.int/our-satellites/meteosat-series" target="_blank" rel="nofollow noopener">EUMETSAT Meteosat</a> images are updated every 15 minutes.
+							Blue&nbsp;clouds at night represent low-lying clouds and fog.
+						</li>
+						<li>
+							Tropical cyclone tracks and forecast maps are created using the most recent data from <a href="https://www.nhc.noaa.gov/" target="_blank" rel="nofollow noopener" title="National Hurricane Center">NHC</a>, <a href="https://www.metoc.navy.mil/jtwc/jtwc.html" target="_blank" rel="nofollow noopener" title="Joint Typhoon Warning Center">JTWC</a>, <a href="https://www.nrlmry.navy.mil/TC.html" target="_blank" rel="nofollow noopener" title="Naval Research Laboratory">NRL</a> and <a href="https://www.ncdc.noaa.gov/ibtracs/" target="_blank" rel="nofollow noopener" title="International Best Track Archive for Climate Stewardship">IBTrACS</a>.
+						</li>
+						<li>
+							Animated surface wind speed forecast maps are generated using the NOAA-NWS <a href="https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs" target="_blank" rel="nofollow noopener" title="Global Forecast System">GFS</a> model.
+						</li>
+						<li>
+							Rain/snow radar maps are provided by <a href="https://www.rainviewer.com/api.html" target="_blank" rel="nofollow noopener">RainViewer</a>.
+							Coverage is limited to areas with radar, and may show anomalies.
+						</li>
+						<li>
+							Fire/heat spots show approximate locations of fires and high temperature, updated daily using data from <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="nofollow noopener" title="Fire Information for Resource Management System">FIRMS</a>.
+						</li>
+						<li>
+							High-definition satellite images are updated twice a day from NASA-NOAA polar-orbiting satellites <a href="https://www.nasa.gov/mission_pages/NPP/main/" target="_blank" rel="noopener">Suomi-NPP</a>, and MODIS <a href="https://aqua.nasa.gov/" target="_blank" rel="noopener">Aqua</a> and <a href="https://terra.nasa.gov/" target="_blank" rel="noopener">Terra</a>, using services from <a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener" title="Global Imagery Browse Services">GIBS</a>, part of <a href="https://earthdata.nasa.gov/eosdis" target="_blank" rel="noopener" title="Earth Observing System Data and Information System">EOSDIS</a>.
+							Imagery is captured at approximately 10:30 local time for “AM” and 13:30 local time for “PM”.
+						</li>
+						<li>
+							Imagery at high zoom levels is provided by <a href="https://www.microsoft.com/maps" target="_blank" rel="nofollow noreferrer">Microsoft</a>.
+						</li>
+					</ul>
+					<h4>Contact</h4>
+					<p>
+						Send a message via <a href="https://twitter.com/zoom_earth" target="_blank" rel="noopener">Twitter</a> or <a href="https://neave.com/contact/#via=zoom.earth" target="_blank" rel="nofollow noopener">e-mail</a>.
+					</p>
+					<p>
+						&copy; 2021 <a href="https://neave.com/" target="_blank" rel="noopener">Neave Interactive</a> | <a href="/legal/terms/" target="_blank" rel="nofollow noopener">Disclaimer</a> | <a href="/legal/privacy/" target="_blank" rel="nofollow noopener">Privacy Policy</a>
+					</p>
+				</div>
+			</aside>
+			<aside class="notifications">
+			</aside>
+			<footer class="attribution"></footer>
+			<div class="panel ad-header">
+				<div>
+<ins class="adsbygoogle" data-ad-client="ca-pub-9316345695176880" data-ad-slot="6630109491" data-page-url="https://zoom.earth/"></ins>
+<script> (adsbygoogle=window.adsbygoogle||[]).push({}); </script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+				</div>
+			</div>
+			<div class="panel ad-side">
+				<div>
+<ins class="adsbygoogle" data-ad-client="ca-pub-9316345695176880" data-ad-slot="2556591053" data-ad-format="rectangle" data-page-url="https://zoom.earth/"></ins>
+<script> (adsbygoogle=window.adsbygoogle||[]).push({}); </script>
+				</div>
+			</div>
+			<div class="help measure">
+				<p class="no-touch">Click to add a point.<br>Click twice to finish.</p>
+				<p class="touch">Tap to add a point.<br>Tap twice to finish.</p>
+			</div>
+			<div class="main-tooltip" role="tooltip">
+				<div class="tooltip"><span class="text"></span><span class="anchor"></span></div>
+			</div>
+			<span class="preload-images"></span>
+		</main>
+		<script>window._ZE={"version":{"vendor":"03c58b2d","map":"052d80d0","app":"10b0a8df"},"countryCode":"PH","mobile":false,"enable2x":true,"useWindWipe":true,"useWebP":true,"bing":1441,"place":{"view":"11.77536778,122.88393253,5"},"strings":{"clock":{"am":"AM","moon":"Moon","pm":"PM"},"direction":{"east":"E","north":"N","south":"S","west":"W"},"error":{"network":"Unable to load","retry":"Try again"},"info":{"fireSpot":"Fire / Heat","fog":"Fog / Low cloud","rain":{"heavy":"Heavy rain","light":"Light rain","moderate":"Moderate rain","veryLight":"Drizzle"},"snow":{"heavy":"Heavy snow","light":"Light snow","moderate":"Moderate snow"}},"notification":{"delay":"Live imagery via %s is delayed","layerDaily":"Switch to _Daily HD Satellite_","layerLive":"Switch to _LIVE Satellite_","offline":"No Internet connection","similar":"Are you looking for %s?","update":"New app version available: _Update now_"},"satellite":{"goes16":"GOES-East","goes17":"GOES-West","him8":"Himawari-8","met11":"Meteosat-11","met8":"Meteosat-8"},"search":{"coordinate":"Coordinate:"},"storm":{"chance":"%s chance of development","forecast":"Forecast","knot":"knot","knots":"knots","lastMod":"Last Modified:","live":"LIVE","liveTitle":"LIVE Images and Tracker","midnight":"Midnight","noon":"Noon","title":"Tropical Cyclone / Hurricane Trackers","warningHurricane":"Hurricane Warning","warningStorm":"Tropical Storm Warning","watchHurricane":"Hurricane Watch","watchStorm":"Tropical Storm Watch","winds":"%s winds"},"strapline":"LIVE weather, storm tracker, wind & radar map"}};!function(e){function r(r){for(var n,l,a=r[0],f=r[1],i=r[2],c=0,s=[];c<a.length;c++)l=a[c],Object.prototype.hasOwnProperty.call(o,l)&&o[l]&&s.push(o[l][0]),o[l]=0;for(n in f)Object.prototype.hasOwnProperty.call(f,n)&&(e[n]=f[n]);for(p&&p(r);s.length;)s.shift()();return u.push.apply(u,i||[]),t()}function t(){for(var e,r=0;r<u.length;r++){for(var t=u[r],n=!0,a=1;a<t.length;a++){var f=t[a];0!==o[f]&&(n=!1)}n&&(u.splice(r--,1),e=l(l.s=t[0]))}return e}var n={},o={3:0},u=[];function l(r){if(n[r])return n[r].exports;var t=n[r]={i:r,l:!1,exports:{}};return e[r].call(t.exports,t,t.exports,l),t.l=!0,t.exports}l.m=e,l.c=n,l.d=function(e,r,t){l.o(e,r)||Object.defineProperty(e,r,{enumerable:!0,get:t})},l.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},l.t=function(e,r){if(1&r&&(e=l(e)),8&r)return e;if(4&r&&"object"==typeof e&&e&&e.__esModule)return e;var t=Object.create(null);if(l.r(t),Object.defineProperty(t,"default",{enumerable:!0,value:e}),2&r&&"string"!=typeof e)for(var n in e)l.d(t,n,function(r){return e[r]}.bind(null,n));return t},l.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return l.d(r,"a",r),r},l.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},l.p="/assets/js/";var a=window.webpackJsonp=window.webpackJsonp||[],f=a.push.bind(a);a.push=r,a=a.slice();for(var i=0;i<a.length;i++)r(a[i]);var p=f;t()}([]);</script>
+		<script src="zoom.earth/assets/js/vendor.03c58b2d.js"></script>
+		<script src="zoom.earth/assets/js/map.052d80d0.js"></script>
+		<script src="zoom.earth/assets/js/app.10b0a8df.js"></script>
+	</body>
+</html>
