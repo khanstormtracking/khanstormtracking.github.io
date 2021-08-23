@@ -2,52 +2,124 @@
   <head>
     <title>Khan Storm Tracking &#8211; Tropical Cyclone Animations and Updates</title>
     <link rel="icon" href="https://khanstormtrackingofficial.files.wordpress.com/2021/06/kstlogo.png">
-<script data-ad-client="ca-pub-7600376707085533" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Exo">
-    <style>
-      body {
-        font-family: 'Exo', sans-serif;
-        font-size: 14px;
-      }
-    </style>
-  </head>
-  <body>
-    <div> </div>
-  </body>
+<!DOCTYPE html>
+<html>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+
+/* Full height image header */
+.bgimg-1 {
+  background-position: center;
+  background-size: cover;
+  background-image: url("https://khanstormtrackingofficial.files.wordpress.com/2021/07/frame-17.png");
+  min-height: 100%;
+}
+
+.w3-bar .w3-button {
+  padding: 16px;
+}
+</style>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-card" id="myNavbar">
+    <a href="#home" class="w3-bar-item w3-button w3-wide">KHAN STORM TRACKING</a>
+    <!-- Right-sided navbar links -->
+    <div class="w3-right w3-hide-small">
+      <a href="#about" class="w3-bar-item w3-button">ABOUT</a>
+      <a href="http://khanstormtracking.github.io/archive/" class="w3-bar-item w3-button">ARCHIVES</a>
+    </div>
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+  <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">ABOUT</a>
+  <a href="http://khanstormtracking.github.io/archive/" onclick="w3_close()" class="w3-bar-item w3-button">ARCHIVES</a>
+</nav>
+
+<!-- Header with full-height image -->
+<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
+  <div class="w3-display-left w3-text-white" style="padding:48px">
+    <span class="w3-jumbo w3-hide-small">Khan Storm Tracking</span><br>
+    <span class="w3-xxlarge w3-hide-large w3-hide-medium">Start something that matters</span><br>
+    <span class="w3-large">This is our secondary website, click the button below to view our official site. </span>
+    <p><a href="https://khanstormtrackingofficial.wordpress.com/" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">The OFFICIAL Website</a></p>
+  </div>
+</header>
+
+<!-- About Section -->
+<div class="w3-container" style="padding:128px 16px" id="about">
+  <h3 class="w3-center">ABOUT US</h3>
+<p class="has-text-align-center">Khan Storm Tracking is a YouTube channel made for Tropical Cyclone Animations and Archived Satellite Imagery. The project was originally made for Satellite Image collection but has now turned into mix of both animations and imagery. The project was founded on July 4, 2020 and has grew from there. The channel was abandoned until 2 months later in September where the founder; Khan made a test animation to test his abilities of video editing. It was rebranded from Storm Imagery to Khan Storm Tracking. There are now multiple team members and contributors in the project. </p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"center"} -->
+<p class="has-text-align-center">We hope that you find our videos helpful, educational and entertaining :)</p>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-64">
+  <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+  <div class="w3-xlarge w3-section">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+  </div>
+</footer>
+ 
+<script>
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
+}
+
+
+// Toggle between showing and hiding the sidebar when clicking the menu icon
+var mySidebar = document.getElementById("mySidebar");
+
+function w3_open() {
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+  } else {
+    mySidebar.style.display = 'block';
+  }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+}
+</script>
+
+</body>
 </html>
-<p><strong>KHAN STORM TRACKING</strong></p>
-<p class="has-text-align-left"><a href="http://khanstormtracking.github.io/archive/">VIEW OF ARCHIVES</a></p>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- Github -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-7600376707085533"
-     data-ad-slot="8606665750"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-<p><a href="https://www.youtube.com/c/KhanStormTrackingOfficial/">https://www.youtube.com/c/KhanStormTrackingOfficial/</a>
-<p><a href="https://www.facebook.com/KhanStormTrackingOfficial/">https://www.facebook.com/KhanStormTrackingOfficial/</a>
-<p><a href="https://twitter.com/KhanTracking/">https://twitter.com/KhanTracking/</a>
-<p><a href="https://khanstormtrackingofficial.wordpress.com">https://khanstormtrackingofficial.wordpress.com/</a>
-
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- Github -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-7600376707085533"
-     data-ad-slot="8606665750"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-  
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Khan Storm Tracking" />
 <meta property="og:description" content="Tropical Cyclone Animations and Updates" />
