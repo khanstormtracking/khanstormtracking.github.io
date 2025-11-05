@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Khan Storm Tracking" />
+  <meta property="og:description" content="ATCF Format - Accumulated Cyclone Energy Calculator" />
+  <meta property="og:url" content="https://khanstormtracking.github.io/acecalculator/" />
+  <meta property="og:site_name" content="Khan Storm Tracking" />
+<meta property="og:image" content="https://khanstormtrackingofficial.files.wordpress.com/2021/07/frame-17.png" />
+<meta name="keywords" content="Khan Storm Tracking">
+<meta name="twitter:text:title" content="ATCF Format - Accumulated Cyclone Energy Calculator" />
+<meta name="twitter:image" content="https://khanstormtrackingofficial.files.wordpress.com/2021/07/frame-17.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="https://khanstormtrackingofficial.files.wordpress.com/2021/05/cropped-khan_logo.png?w=32" sizes="32x32" />
+<link rel="icon" href="https://khanstormtrackingofficial.files.wordpress.com/2021/05/cropped-khan_logo.png?w=192" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://khanstormtrackingofficial.files.wordpress.com/2021/05/cropped-khan_logo.png?w=180" />
+<meta name="msapplication-TileImage" content="https://khanstormtrackingofficial.files.wordpress.com/2021/05/cropped-khan_logo.png?w=270" />
+<meta name="theme-color" content="#0D8719">
+  <title>Accumulated Cyclone Energy (ACE) Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f3f4f6; padding:24px; }
+    .container { max-width:900px; margin:0 auto; background:white; padding:20px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+    .green-box { background:#e6ffed; border:3px solid #22c55e; padding:18px; border-radius:12px; text-align:center; color:#065f46; margin-bottom:20px; }
+    textarea{ width:100%; min-height:120px; font-family:monospace; }
+    table{ width:100%; border-collapse:collapse; margin-top:10px; }
+    th, td{ border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; }
+    .btn{ background:#2563eb; color:white; padding:8px 12px; border-radius:6px; border:none; cursor:pointer; }
+    h1 { text-align:center; margin-bottom:20px; }
+    input[type=file] { font-size:14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Test: KST'S Accumulated Cyclone Energy (ACE) Calculator</h1>
+    <div class="green-box">
+      <h2 id="aceTotal" style="font-size:32px; margin:0">ACE = 0.00</h2>
+      <p id="sumV2" style="margin:4px 0 0 0">ΣV² = 0.00 kt²</p>
+    </div>
+
+    <p>ACE = 1e-4 × Σ(Vmax (knots))² over all 6-hour periods where V ≥ 34 kt.</p> <p>This calculator only accepts ATCF format.</p>
+
+    <h3>Paste or upload ATCF data</h3>
+    <textarea id="atcfInput" placeholder="Paste ATCF content here"></textarea>
+    <div style="margin-top:8px; display:flex; gap:8px; align-items:center">
+      <button class="btn" id="parseBtn">Paste ATCF</button>
+      <input type="file" id="fileInput" accept=".txt,.dat" />
+    </div>
+
+    <div id="tableWrap"></div>
+  </div>
+
+  <script>
+    function toKnots(v){ return Number(v)||0; }
+
+    function parseATCF(text){
+      const lines = text.split(/\r?\n/).filter(l=>l.trim()!=='');
+      const parsed = [];
+      for(const line of lines){
+        const parts = line.split(',').map(p=>p.trim());
+        if(parts.length>=9){
+          const datetime = parts[2];
+          if(!datetime || datetime.length<10) continue;
+          const yyyy = datetime.substring(0,4);
+          const mm = datetime.substring(4,6);
+          const dd = datetime.substring(6,8);
+          const hh = datetime.substring(8,10);
+          if(!['00','06','12','18'].includes(hh)) continue;
+          const formatted = `${yyyy}-${mm}-${dd}-${hh}Z`;
+          const wind = Number(parts[8])||0;
+          parsed.push({time:formatted, speed:wind});
+        }
+      }
+      const map = {};
+      for(const e of parsed){
+        if(!map[e.time]) map[e.time] = { ...e, count:1 };
+        else { map[e.time].speed = (map[e.time].speed*map[e.time].count + e.speed)/(map[e.time].count+1); map[e.time].count+=1; }
+      }
+      const merged = Object.values(map).sort((a,b)=> a.time>b.time?1:-1);
+      return merged;
+    }
+
+    function computeACE(rows){
+      let sum=0; const aceRows = rows.map(r=>{ const v=toKnots(r.speed); const acePart = v>=34? (v*v*1e-4):0; if(v>=34) sum+=v*v; return { ...r, aceValue: acePart.toFixed(2) }; });
+      const ace=(sum*1e-4).toFixed(2);
+      return { ace, sum: sum.toFixed(2), aceRows };
+    }
+
+    const parseBtn = document.getElementById('parseBtn');
+    const atcfInput = document.getElementById('atcfInput');
+    const fileInput = document.getElementById('fileInput');
+    const tableWrap = document.getElementById('tableWrap');
+    const aceTotal = document.getElementById('aceTotal');
+    const sumV2 = document.getElementById('sumV2');
+
+    function renderTable(aceData){
+      const rows = aceData.aceRows;
+      aceTotal.textContent = `ACE = ${aceData.ace}`;
+      sumV2.textContent = `ΣV² = ${aceData.sum} kt²`;
+      if(rows.length===0){ tableWrap.innerHTML=''; return; }
+      let html = `<table><thead><tr><th>Timestamp (UTC)</th><th>Wind (kt)</th><th>ACE at Time</th></tr></thead><tbody>`;
+      rows.forEach(r=>{ html+=`<tr><td>${r.time}</td><td>${Number(r.speed).toFixed(1)}</td><td>${r.aceValue}</td></tr>`; });
+      html += '</tbody></table>';
+      tableWrap.innerHTML = html;
+    }
+
+    parseBtn.addEventListener('click', ()=>{ const rows = parseATCF(atcfInput.value); const aceData = computeACE(rows); renderTable(aceData); });
+
+    fileInput.addEventListener('change', e=>{ const file = e.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = ev=>{ atcfInput.value = ev.target.result; const rows = parseATCF(ev.target.result); const aceData = computeACE(rows); renderTable(aceData); }; reader.readAsText(file); });
+  </script>
+</body>
+</html>
